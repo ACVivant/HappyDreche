@@ -1,0 +1,82 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             tools:context=".authentication.WelcomeActivity"
+             android:id="@+id/welcome_activity_layout">
+
+    <ImageView
+            android:id="@+id/imgPlaylistItemBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:maxHeight="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_welcome" />
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/main_activity_linear_layout">
+
+        <!-- TITLE -->
+        <TextView
+                android:id="@+id/welcome_title_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:textColor="@color/colorPrimary"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="center_horizontal"
+                android:paddingTop="4dp"
+                android:text="@string/app_title"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/welcome_subtitle"/>
+
+        <ImageView
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:src="@drawable/logo2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+        />
+
+        <!-- DESCRIPTION -->
+        <TextView
+                android:id="@+id/welcome_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/welcome_description"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                android:textColor="@color/colorPrimary"
+                android:background="@color/colorPrimaryDark"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/welcome_button_connect"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_bigmargin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- BUTTON ALREADY CONNECTED -->
+        <Button
+                android:id="@+id/welcome_button_connect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_connexion"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:background="@color/colorPrimary"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:padding="@dimen/activity_vertical_margin"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

@@ -8,4 +8,7 @@
     <dimen name="nav_header_height">216dp</dimen>
     <dimen name="nav_header_logo">152dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="login_horizontal_margin">16dp</dimen>
+    <dimen name="login_vertical_margin">16dp</dimen>
 </resources>
