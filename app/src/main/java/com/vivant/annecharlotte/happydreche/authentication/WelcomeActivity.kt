@@ -4,12 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity;
+//import android.support.design.widget.Snackbar
+//import android.support.v7.app.AppCompatActivity;
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.OnSuccessListener
 import com.vivant.annecharlotte.happydreche.R
@@ -86,7 +87,7 @@ class WelcomeActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
             if(resultCode == Activity.RESULT_OK) {
                 val user = FirebaseAuth.getInstance().currentUser // get current user
-                Toast.makeText(this, ""+user!!.email, Toast.LENGTH_LONG).show()
+               // Toast.makeText(this, ""+user!!.email, Toast.LENGTH_LONG).show()
 
                 val intent = Intent(this, MainActivity::class.java)
 // To pass any data to next activity

@@ -5,4 +5,6 @@
     <color name="colorAccent">#ffa000</color>
     <color name="colorPrimaryTransparent">#a6ffa000</color>
     <color name="colorPrimaryDarkTransparent">#a6263238</color>
+
+    <color name="colorSecondary">#26a69a</color>
 </resources>

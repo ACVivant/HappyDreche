@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/map_bottom_shop"
+        android:enabled="true"
+        android:title="@string/map_bottom_market"
+        android:icon="@drawable/ic_shopping"
+        app:showAsAction="ifRoom"/>
+
+    <item
+            android:id="@+id/map_bottom_resto"
+            android:enabled="true"
+            android:title="@string/map_bottom_resto"
+            android:icon="@drawable/ic_restaurant"
+            app:showAsAction="ifRoom"/>
+
+    <item
+            android:id="@+id/map_bottom_food"
+            android:enabled="true"
+            android:title="@string/map_bottom_food_transfo"
+            android:icon="@drawable/ic_cook"
+            app:showAsAction="ifRoom"/>
+
+    <item
+            android:id="@+id/map_bottom_nonfood"
+            android:enabled="true"
+            android:title="@string/map_bottom_nonfood_transfo"
+            android:icon="@drawable/ic_build"
+            app:showAsAction="ifRoom"/>
+
+    <item
+            android:id="@+id/map_bottom_research"
+            android:enabled="true"
+            android:title="@string/map_bottom_research"
+            android:icon="@drawable/ic_search"
+            app:showAsAction="ifRoom"/>
+
+</menu>

@@ -38,4 +38,11 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
 
+    //Map
+    <string name="map_bottom_market">Boutiques"</string>
+    <string name="map_bottom_resto">"Restos, brasseriees&#8230;"</string>
+    <string name="map_bottom_food_transfo">"Projets alimentaires"</string>
+    <string name="map_bottom_nonfood_transfo">"Projets non alimentaires</string>
+    <string name="map_bottom_research">"Projets de recherche</string>
+
 </resources>
