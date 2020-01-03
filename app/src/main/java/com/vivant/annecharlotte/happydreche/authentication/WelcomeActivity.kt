@@ -101,9 +101,11 @@ class WelcomeActivity : AppCompatActivity() {
         }
     }
     private fun showSingInOptions() {
-        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+        startActivityForResult(AuthUI.getInstance()
+            .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .setTheme(R.style.LoginTheme)
+            .setIsSmartLockEnabled(false)
             .build(), RC_SIGN_IN )
     }
 }

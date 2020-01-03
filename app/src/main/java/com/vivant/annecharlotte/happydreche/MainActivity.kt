@@ -25,7 +25,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -36,7 +35,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.vivant.annecharlotte.happydreche.firestore.MarkersUrl
 import com.vivant.annecharlotte.happydreche.firestore.Project
 import kotlinx.android.synthetic.main.activity_main.*
@@ -293,7 +291,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(TAG, "getData")
 
         // Pour tester
-        val projet1 = Project("001", "projet_1", "Boss1","contact@projet1", "www.projet1", "012456789", "descripton projet 1", 1,
+        val projet1 = Project( "001", "projet_1", "Boss1","contact@projet1", "www.projet1", "012456789", "descripton projet 1", 1,
           "www.photo.projet1", "4", "rue de Soissons", "", "60800", "Crépy-en-Valois", "France")
         val projet2 = Project("002", "projet_2", "Boss2", "contact@projet2", "www.projet2", "012456789", "descripton projet 2", 2,
             "www.photo.projet2", "6", "rue Alexandre Dumas", "", "60800", "Crépy-en-Valois", "France")
@@ -342,17 +340,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(TAG, "type= " + currentType)
 
 
-        currentId = currentProject.projectId
-        tab_id[i] = currentId
-        Log.d(TAG, "id: " +currentId)
-
         currentName = currentProject.projectName
         tab_name[i] = currentName
         Log.d(TAG, "name: " +currentName)
 
         tab_latitude[i] = setPropertyLatLng(
             Address(
-                currentProject.projectId,
                 currentProject.projectAddressNumber,
                 currentProject.projectAddressStreet,
                 currentProject.projectAddressStreet2,
@@ -364,7 +357,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(TAG,"latitude: "+ tab_latitude[i].toString())
         tab_longitude[i] = setPropertyLatLng(
             Address(
-                currentProject.projectId,
                 currentProject.projectAddressNumber,
                 currentProject.projectAddressStreet,
                 currentProject.projectAddressStreet2,

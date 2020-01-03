@@ -50,6 +50,7 @@
     <string name="add_type">"Type de projet"</string>
     <string name="add_description_title">"Description"</string>
     <string name="add_description_text">"En quoi consiste ce projet?"</string>
+    <string name="add_picture_url">"Url de l'image"</string>
     <string name="add_name">"Nom du projet"</string>
     <string name="add_boss">"Responsable(s)"</string>
     <string name="add_website">"Site internet"</string>
@@ -64,6 +65,8 @@
     <string name="set_location_town">"Ville"</string>
     <string name="set_location_country">"Pays"</string>
     <string name="save_btn">"Enregistrer"</string>
+    <string name="save_error">"Il faut entrer au minimum un nom de projet, une description et une adresse complète"</string>
+    <string name="save_completed">"Nouveau projet enregistré"</string>
 
     <string-array name="add_project_type">
         <item>Acheter</item>
