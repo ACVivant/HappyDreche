@@ -141,15 +141,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 longitude = mLastLocation.longitude
 
                 val latLng = LatLng(latitude, longitude)
-                val markerOptions = MarkerOptions()
-                    .position(latLng)
-                    .title("your position")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                mMarker = mMap!!.addMarker(markerOptions)
 
                 //Move camera
                 mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-                mMap!!.animateCamera(CameraUpdateFactory.zoomTo(11f))
+                mMap!!.animateCamera(CameraUpdateFactory.zoomTo(10f))
                 mMap!!.setPadding(0,0,16,304)
             }
         }
@@ -377,9 +372,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun addMarker(latLng: LatLng, type: Int,name: String?) {
 // Ajuster la couleur du marqueur avec type
+        var markerColor : Float = BitmapDescriptorFactory.HUE_AZURE
+        when (type) {
+            1 -> markerColor = BitmapDescriptorFactory.HUE_AZURE
+            2 -> markerColor = BitmapDescriptorFactory.HUE_BLUE
+            3 -> markerColor = BitmapDescriptorFactory.HUE_ORANGE
+            4 -> markerColor = BitmapDescriptorFactory.HUE_RED
+            5 -> markerColor = BitmapDescriptorFactory.HUE_GREEN
+        }
+
         val options = MarkerOptions()
             .position(latLng)
             .title(name)
+            .icon(BitmapDescriptorFactory.defaultMarker(markerColor))
 
         mMap.addMarker(options)
     }
