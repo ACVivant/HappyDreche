@@ -25,4 +25,11 @@
             app:itemTextColor="@drawable/nav_selector"
             app:menu="@menu/map_bottom_menu"/>
 
+    <ProgressBar
+            android:id="@+id/map_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
 </RelativeLayout>
