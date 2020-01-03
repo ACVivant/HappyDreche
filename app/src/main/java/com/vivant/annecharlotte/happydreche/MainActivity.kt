@@ -1,5 +1,6 @@
 package com.vivant.annecharlotte.happydreche
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -115,8 +116,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+           // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+           //     .setAction("Action", null).show()
+            val intent = Intent(this, AddProjectActivity::class.java)
+// To pass any data to next activity
+         //   intent.putExtra("keyIdentifier", value)
+// start your next activity
+            startActivity(intent)
         }
 
         val toggle = ActionBarDrawerToggle(
@@ -144,7 +150,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 //Move camera
                 mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-                mMap!!.animateCamera(CameraUpdateFactory.zoomTo(10f))
+                mMap!!.animateCamera(CameraUpdateFactory.zoomTo(9f))
                 mMap!!.setPadding(0,0,16,304)
             }
         }
@@ -285,9 +291,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @Throws(IOException::class)
     fun getData() {
         Log.d(TAG, "getData")
-        val projet1 = Project("001", "projet_1", "contact@projet1", "www.projet1", "012456789", "descripton projet 1", 1,
+
+        // Pour tester
+        val projet1 = Project("001", "projet_1", "Boss1","contact@projet1", "www.projet1", "012456789", "descripton projet 1", 1,
           "www.photo.projet1", "4", "rue de Soissons", "", "60800", "Crépy-en-Valois", "France")
-        val projet2 = Project("002", "projet_2", "contact@projet2", "www.projet2", "012456789", "descripton projet 2", 1,
+        val projet2 = Project("002", "projet_2", "Boss2", "contact@projet2", "www.projet2", "012456789", "descripton projet 2", 2,
             "www.photo.projet2", "6", "rue Alexandre Dumas", "", "60800", "Crépy-en-Valois", "France")
 
         val projets1et2 = listOf(projet1, projet2)

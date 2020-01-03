@@ -11,4 +11,7 @@
 
     <dimen name="login_horizontal_margin">16dp</dimen>
     <dimen name="login_vertical_margin">16dp</dimen>
+
+    <dimen name="default_text_size">18sp</dimen>
+    <dimen name="add_text_description_size">96dp</dimen>
 </resources>

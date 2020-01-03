@@ -39,10 +39,36 @@
     <string name="title_activity_welcome">WelcomeActivity</string>
 
     //Map
-    <string name="map_bottom_market">Boutiques"</string>
-    <string name="map_bottom_resto">"Restos, brasseriees&#8230;"</string>
-    <string name="map_bottom_food_transfo">"Projets alimentaires"</string>
-    <string name="map_bottom_nonfood_transfo">"Projets non alimentaires</string>
-    <string name="map_bottom_research">"Projets de recherche</string>
+    <string name="map_bottom_market">"Acheter"</string>
+    <string name="map_bottom_resto">"Déguster"</string>
+    <string name="map_bottom_transfo">"Transformer"</string>
+    <string name="map_bottom_research">"Connaître"</string>
+    <string name="map_bottom_all">"Tous"</string>
 
+    // Add Project
+    <string name="add_title">"Ajouter un projet"</string>
+    <string name="add_type">"Type de projet"</string>
+    <string name="add_description_title">"Description"</string>
+    <string name="add_description_text">"En quoi consiste ce projet?"</string>
+    <string name="add_name">"Nom du projet"</string>
+    <string name="add_boss">"Responsable(s)"</string>
+    <string name="add_website">"Site internet"</string>
+    <string name="add_email">"Adresse email"</string>
+    <string name="add_tel">"Téléphone"</string>
+    <string name="add_address_title">"Adresse</string>
+    <string name="set_location_number">"Numéro"</string>
+    <string name="set_location_street">"Rue"</string>
+    <string name="set_location_street2">"Complément"</string>
+    <string name="location_street2">"Appt, étage, bât&#8230;"</string>
+    <string name="set_location_zipcode">"Code postal"</string>
+    <string name="set_location_town">"Ville"</string>
+    <string name="set_location_country">"Pays"</string>
+    <string name="save_btn">"Enregistrer"</string>
+
+    <string-array name="add_project_type">
+        <item>Acheter</item>
+        <item>Déguster</item>
+        <item>Transformer</item>
+        <item>Connaitre</item>
+    </string-array>
 </resources>

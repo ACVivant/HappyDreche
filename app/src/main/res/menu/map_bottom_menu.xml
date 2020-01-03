@@ -17,17 +17,10 @@
             app:showAsAction="ifRoom"/>
 
     <item
-            android:id="@+id/map_bottom_food"
-            android:enabled="true"
-            android:title="@string/map_bottom_food_transfo"
-            android:icon="@drawable/ic_cook"
-            app:showAsAction="ifRoom"/>
-
-    <item
             android:id="@+id/map_bottom_nonfood"
             android:enabled="true"
-            android:title="@string/map_bottom_nonfood_transfo"
-            android:icon="@drawable/ic_build"
+            android:title="@string/map_bottom_transfo"
+            android:icon="@drawable/ic_upcycle"
             app:showAsAction="ifRoom"/>
 
     <item
@@ -35,6 +28,13 @@
             android:enabled="true"
             android:title="@string/map_bottom_research"
             android:icon="@drawable/ic_search"
+            app:showAsAction="ifRoom"/>
+
+    <item
+            android:id="@+id/map_bottom_all"
+            android:enabled="true"
+            android:title="@string/map_bottom_all"
+            android:icon="@drawable/ic_all_inclusive"
             app:showAsAction="ifRoom"/>
 
 </menu>
