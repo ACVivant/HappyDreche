@@ -44,7 +44,7 @@ class AddProjectActivity : AppCompatActivity() {
         addStreetAddressText = findViewById(R.id.add_address_street)
         addStreet2AddressText = findViewById(R.id.add_address_street2)
         addZipcodeAddressText = findViewById(R.id.add_address_zipcode)
-        addTownAddressText = findViewById(R.id.add_address_zipcode)
+        addTownAddressText = findViewById(R.id.add_address_town)
         addCountryAddressText = findViewById(R.id.add_address_country)
 
         addSpinnerType = findViewById(R.id.add_spinner_type)

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+    >
+        <TextView
+                android:id="@+id/project_item_name"
+                android:text="Nom du projet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/mini_margin"
+                android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                android:textSize="@dimen/default_text_size"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+        />
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+        >
+
+            <TextView
+                    android:id="@+id/project_item_zipcode"
+                    android:text="CP000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="@dimen/mini_margin"
+                    android:paddingHorizontal="@dimen/activity_horizontal_margin"
+                    android:textSize="@dimen/default_text_size"
+            />
+            <TextView
+                    android:id="@+id/project_item_town"
+                    android:text="Ville"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/mini_margin"
+                    android:textSize="@dimen/default_text_size"
+            />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+            android:id="@+id/project_item_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_action_add"
+            android:tint="@color/colorPrimaryDark"
+            android:layout_gravity="center"
+            android:padding="@dimen/mini_margin"/>
+</LinearLayout>

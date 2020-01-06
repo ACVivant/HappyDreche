@@ -230,10 +230,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_map  -> {
-                // Handle the camera action
             }
-            R.id.nav_gallery -> {
 
+            R.id.nav_gallery -> {
+                val intent = Intent(this, ListActivity::class.java)
+                startActivity(intent)
             }
             R.id.nav_search -> {
 

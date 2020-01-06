@@ -65,7 +65,8 @@
     <string name="set_location_town">"Ville"</string>
     <string name="set_location_country">"Pays"</string>
     <string name="save_btn">"Enregistrer"</string>
-    <string name="save_error">"Il faut entrer au minimum un nom de projet, une description et une adresse complète"</string>
+    <string name="save_error">"Il faut entrer au minimum un nom de projet, une description et une adresse complète"
+    </string>
     <string name="save_completed">"Nouveau projet enregistré"</string>
 
     <string-array name="add_project_type">

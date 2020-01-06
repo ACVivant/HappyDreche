@@ -9,4 +9,11 @@ class Project(
     var projectName: String, var projectBoss: String, var projectEmail: String, var projectWebsite: String, var projectTel: String,
     var projectDescription: String, var projectType: Int, var projectUrlPicture: String,
     var projectAddressNumber: String, var projectAddressStreet: String, var projectAddressStreet2: String, var projectAddressZipcode: String, var projectAddressTown: String,
-    var projectAddressCountry: String)
+    var projectAddressCountry: String) {
+
+    constructor(): this("",
+        "","","","","",
+        "", 0, "",
+        "", "", "", "", "", "")
+}
+
