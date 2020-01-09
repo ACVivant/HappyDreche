@@ -52,7 +52,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_action_add"
-            android:tint="@color/colorPrimaryDark"
+            android:tint="@color/colorPrimary"
             android:layout_gravity="center"
             android:padding="@dimen/mini_margin"/>
 </LinearLayout>

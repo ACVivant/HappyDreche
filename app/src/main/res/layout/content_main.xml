@@ -10,26 +10,11 @@
         tools:context=".MainActivity">
 
     <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/fragment_container"
+            android:name="com.vivant.annecharlotte.happydreche.PresentationFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/map_bottom_navigation_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:itemBackground="@color/colorPrimary"
-            app:itemIconTint="@drawable/nav_selector"
-            app:itemTextColor="@drawable/nav_selector"
-            app:menu="@menu/map_bottom_menu"/>
 
-    <ProgressBar
-            android:id="@+id/map_progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"/>
 
 </RelativeLayout>

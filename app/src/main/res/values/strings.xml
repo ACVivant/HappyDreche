@@ -8,6 +8,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="hd_email">"happydreche@gmail.com"</string>
+    <string name="logout"> "Se déconnecter"</string>
 
     //Welcome
     <string name="welcome_description">"Annuaire des projets de valorisation de la drêche de brasserie"</string>
@@ -18,10 +19,12 @@
     <string name="welcome_title">"Connexion"</string>
 
     //Menu
+    <string name="menu_pres">Présentation</string>
     <string name="menu_projects">Projects</string>
     <string name="menu_map">Map</string>
     <string name="menu_listing">Listing</string>
     <string name="menu_search">Search</string>
+    <string name="menu_add">Add a project</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="menu_communicate">Communicate</string>
@@ -37,6 +40,13 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
+
+    //Presentation
+    <string name="presentation_text">"Où acheter des produits à base de drêche? Où en consommer? Qui la transforme? Qui fait des recherces? C'est toutes ces infos que nous voulons recenser dans cette appli, avec votre aide!</string>
+    <string name="presentation_shop">"Les boutiques où vous trouverez des produits à base de drêche.</string>
+    <string name="presentation_eat">"Les brasseries, les salons de thé, les restos où vous pourrez manger des produits à base de drêche.</string>
+    <string name="presentation_project">"Les acteurs de la transformation de la drêche.</string>
+    <string name="presentation_research">"Les projets de recherche pour mieux connaître la drêche.</string>
 
     //Map
     <string name="map_bottom_market">"Acheter"</string>
@@ -75,4 +85,7 @@
         <item>Transformer</item>
         <item>Connaitre</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

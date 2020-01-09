@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.vivant.annecharlotte.happydreche.firestore.Project
 
 /**
@@ -30,8 +31,12 @@ class ListingProjectsAdapter(val mCtx : Context, val layoutResId: Int, val proje
         projectTown.text = project.projectAddressTown
         projectZipcode.text = project.projectAddressZipcode
 
-        // Compléter pour l'icône
-
+        when (project.projectType) {
+            1 -> projectIcon.setImageDrawable(view.resources.getDrawable(R.drawable.ic_shopping))
+            2 -> projectIcon.setImageDrawable(view.resources.getDrawable(R.drawable.ic_restaurant))
+            3 -> projectIcon.setImageDrawable(view.resources.getDrawable(R.drawable.ic_upcycle))
+            4 -> projectIcon.setImageDrawable(view.resources.getDrawable(R.drawable.ic_search))
+        }
         return view
     }
 }
