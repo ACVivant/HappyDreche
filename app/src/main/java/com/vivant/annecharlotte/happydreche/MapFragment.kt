@@ -3,6 +3,7 @@ package com.vivant.annecharlotte.happydreche
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Build
@@ -20,13 +21,28 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.database.*
+import com.vivant.annecharlotte.happydreche.firestore.MarkersUrl
+import com.vivant.annecharlotte.happydreche.firestore.Project
 import kotlinx.android.synthetic.main.fragment_map.*
+import java.io.IOException
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val ARG_ID = "param_id"
+private const val ARG_NAME = "param_name"
+private const val ARG_TYPE = "param_type"
+private const val ARG_STREET_NUMBER = "param_number_in_street"
+private const val ARG_STREET = "param_street"
+private const val ARG_ZIPCODE = "param_zipcode"
+private const val ARG_TOWN = "param_town"
+private const val ARG_COUNTRY = "param_country"
 private const val TAG = "MapFragment"
 private const val MY_PERMISSION_CODE: Int = 1000
 
@@ -65,11 +81,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var tab_latitude: DoubleArray
     private lateinit var tab_longitude: DoubleArray
 
+    // Data
+    lateinit var ref: DatabaseReference
+    lateinit var projectsList: MutableList<Project>
 
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private var paramId: Array<String>? = null
+    private var paramName: Array<String>? = null
+    private var paramType: IntArray? = null
+    private var paramStreetNumber : Array<String>? = null
+    private var paramStreet: Array<String>? = null
+    private var paramZipcode: Array<String>? = null
+    private var paramTown: Array<String>? = null
+    private var paramCountry: Array<String>? = null
+
     private var listener: OnFragmentInteractionListener? = null
 
 
@@ -144,10 +173,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (context is OnFragmentInteractionListener) {
             listener = context
             arguments?.let {
-                param1 = it.getString(ARG_PARAM1)
-                param2 = it.getString(ARG_PARAM2)
+                /*paramId = it.getStringArray(ARG_ID)
+                paramName = it.getStringArray(ARG_NAME)
+                paramType = it.getIntArray(ARG_TYPE)
+                paramStreetNumber = it.getStringArray(ARG_STREET_NUMBER)
+                paramStreet = it.getStringArray(ARG_STREET)
+                paramZipcode = it.getStringArray(ARG_ZIPCODE)
+                paramTown = it.getStringArray(ARG_TOWN)
+                paramCountry = it.getStringArray(ARG_COUNTRY)
 
-                Log.d(TAG,"print: " + param1)
+                Log.d(TAG,"print: " + paramName.toString())*/
             }
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
@@ -187,12 +222,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        /*fun newInstance(paramId: Array<String>, paramName: Array<String>, paramType: IntArray,
+                        paramStreetNumber : Array<String>, paramStreet: Array<String>, paramZipcode: Array<String>, paramTown: Array<String>, paramCountry: Array<String> ) =
             MapFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putStringArray(ARG_ID, paramId)
+                    putStringArray(ARG_NAME, paramName)
+                    putIntArray(ARG_TYPE, paramType)
+                    putStringArray(ARG_STREET_NUMBER, paramStreetNumber)
+                    putStringArray(ARG_STREET, paramStreet)
+                    putStringArray(ARG_ZIPCODE, paramZipcode)
+                    putStringArray(ARG_TOWN, paramTown)
+                    putStringArray(ARG_COUNTRY, paramCountry)
                 }
+            }*/
+        fun newInstance() =
+            MapFragment().apply {
+                arguments = Bundle().apply {}
             }
     }
 
@@ -225,8 +271,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mMap!!.animateCamera(CameraUpdateFactory.zoomTo(9f))
         mMap!!.setPadding(0,0,16,304)
 
-        hideProgressBar()
-        //getData()
+        getData()
     }
 
     override fun onStop() {
@@ -308,6 +353,156 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
+    //--------------------------------------------------
+    // Markers
+    //--------------------------------------------------
+    private fun updateProjectList(projects: Array<Project>) {
+        Log.d(TAG, "updateProjectList")
+        Log.d(TAG, "taille " + projects.size)
+
+        tab_id = arrayOfNulls(projects.size)
+        tab_type = IntArray(projects.size)
+        //tab_name = arrayOf("nom1", "nom2")
+        tab_name = arrayOfNulls(projects.size)
+        tab_latitude = DoubleArray(projects.size)
+        tab_longitude = DoubleArray(projects.size)
+
+        for (i in projects.indices) {
+            Log.d(TAG, "indice: " +i)
+            loadMarkerInfos(projects[i], i)
+        }
+
+        hideProgressBar()
+    }
+
+    fun loadMarkerInfos(currentProject: Project, i: Int) {
+        Log.d(TAG, "i= "+i)
+        currentType = currentProject.projectType
+        tab_type[i] = currentType
+        Log.d(TAG, "type= " + currentType)
+
+
+        currentName = currentProject.projectName
+        tab_name[i] = currentName
+        Log.d(TAG, "name: " +currentName)
+
+        tab_latitude[i] = setPropertyLatLng(
+            Address(
+                currentProject.projectAddressNumber,
+                currentProject.projectAddressStreet,
+                currentProject.projectAddressStreet2,
+                currentProject.projectAddressZipcode,
+                currentProject.projectAddressTown,
+                currentProject.projectAddressCountry
+            )
+        ).latitude
+        Log.d(TAG,"latitude: "+ tab_latitude[i].toString())
+        tab_longitude[i] = setPropertyLatLng(
+            Address(
+                currentProject.projectAddressNumber,
+                currentProject.projectAddressStreet,
+                currentProject.projectAddressStreet2,
+                currentProject.projectAddressZipcode,
+                currentProject.projectAddressTown,
+                currentProject.projectAddressCountry
+            )
+        ).longitude
+        Log.d(TAG,"longitude: "+ tab_longitude[i].toString())
+
+        addMarker(LatLng(tab_latitude[i], tab_longitude[i]), tab_type[i], tab_name[i])
+    }
+
+    private fun addMarker(latLng: LatLng, type: Int,name: String?) {
+// Ajuster la couleur du marqueur avec type
+        var markerColor : Float = HUE_AZURE
+        when (type) {
+            1 -> markerColor = HUE_AZURE
+            2 -> markerColor = HUE_BLUE
+            3 -> markerColor = HUE_ORANGE
+            4 -> markerColor = HUE_RED
+            5 -> markerColor = HUE_GREEN
+        }
+
+        val options = MarkerOptions()
+            .position(latLng)
+            .title(name)
+            .icon(defaultMarker(markerColor))
+
+        mMap.addMarker(options)
+    }
+
+    //------------------------------------------------
+    // Geocoder
+    //------------------------------------------------
+
+     fun setPropertyLatLng(address: Address): LatLng {
+         try {
+             currentLat = geocoder(address).latitude
+         } catch (e: IOException) {
+             e.printStackTrace()
+         }
+
+         try {
+             currentLng = geocoder(address).longitude
+         } catch (e: IOException) {
+             e.printStackTrace()
+         }
+
+         return LatLng(currentLat, currentLng)
+     }
+
+     @Throws(IOException::class)
+     fun geocoder(currentAddress: Address): LatLng {
+         val markersUrl = MarkersUrl()
+         val location = markersUrl.createGeocoderUrl(
+             currentAddress.numberInStreet,
+             currentAddress.street,
+             currentAddress.zipcode,
+             currentAddress.town,
+             currentAddress.country
+         )
+         val gc = Geocoder(context)
+         val list = gc.getFromLocationName(location, 1)
+         val add = list[0]
+         val locality = add.locality
+         val lat = add.latitude
+         val lng = add.longitude
+         return LatLng(lat, lng)
+     }
+
+    //--------------------------------------------------
+    // Data
+    //--------------------------------------------------
+  @Throws(IOException::class)
+    fun getData() {
+        Log.d(TAG, "getData")
+
+        projectsList = mutableListOf()
+
+        ref = FirebaseDatabase.getInstance().getReference("projects")
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0!!.exists()) {
+                    projectsList.clear()
+
+                    for(h in p0.children) {
+                        val project = h.getValue(Project::class.java)
+                        projectsList.add(project!!)
+
+                        Log.d(TAG, "name: "+project!!.projectName)
+
+                    }
+                }
+                updateProjectList(projectsList.toTypedArray())
+            }
+        })
+    }
+
 
     //--------------------------------------------------
     // Design

@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.*
 import com.vivant.annecharlotte.happydreche.ListFragment.OnFragmentInteractionListener
 import com.vivant.annecharlotte.happydreche.firestore.MarkersUrl
 import com.vivant.annecharlotte.happydreche.firestore.Project
@@ -60,32 +61,6 @@ MapFragment.OnFragmentInteractionListener, ListFragment.OnFragmentInteractionLis
     lateinit var mapFragment: MapFragment
     lateinit var listFragment: ListFragment
     lateinit var presentationFragment: PresentationFragment
-
-    private lateinit var mMap: GoogleMap
-    private var latitude:Double=0.toDouble()
-    private var longitude:Double=0.toDouble()
-    private lateinit var mLastLocation:Location
-
-    //Location
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    lateinit var locationRequest: LocationRequest
-    lateinit var  locationCallback: LocationCallback
-
-    //Markers
-    private var mMarker:Marker?=null
-    private var currentLat: Double = 0.toDouble()
-    private var currentLng:Double = 0.toDouble()
-    private var currentType: Int = 0
-    private lateinit var currentName: String
-    private lateinit var currentId: String
-
-    private lateinit var tab_id: Array<String?>
-    private lateinit var tab_type: IntArray
-    private lateinit var tab_name: Array<String?>
-    private lateinit var tab_latitude: DoubleArray
-    private lateinit var tab_longitude: DoubleArray
-
-    //private var projectViewModel: ProjectViewModel? = null
 
     companion object {
         private const val MY_PERMISSION_CODE: Int = 1000
@@ -107,9 +82,11 @@ MapFragment.OnFragmentInteractionListener, ListFragment.OnFragmentInteractionLis
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        mapFragment = MapFragment.newInstance("map fragment", "OK")
+        mapFragment = MapFragment.newInstance()
         listFragment = ListFragment.newInstance("list fragment", "OK")
         presentationFragment = PresentationFragment.newInstance("presentation fragment", "OK")
+
+        //getData()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -171,8 +148,6 @@ MapFragment.OnFragmentInteractionListener, ListFragment.OnFragmentInteractionLis
                    .addToBackStack(listFragment.toString())
                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                    .commit()
-              // val intent = Intent(this, ListActivity::class.java)
-              // startActivity(intent)
            }
            R.id.nav_search -> {
 
@@ -196,154 +171,4 @@ MapFragment.OnFragmentInteractionListener, ListFragment.OnFragmentInteractionLis
     override fun onFragmentInteraction(uri: Uri) {
         Log.d(TAG, "On Fragment Interaction")
     }
-
-
-    //------------------------------------------------
-    // Data
-    //------------------------------------------------
-
-/*    @Throws(IOException::class)
-    fun getData() {
-        Log.d(TAG, "getData")
-
-        // Pour tester
-        val projet1 = Project( "001", "projet_1", "Boss1","contact@projet1", "www.projet1", "012456789", "descripton projet 1", 1,
-          "www.photo.projet1", "4", "rue de Soissons", "", "60800", "Crépy-en-Valois", "France")
-        val projet2 = Project("002", "projet_2", "Boss2", "contact@projet2", "www.projet2", "012456789", "descripton projet 2", 2,
-            "www.photo.projet2", "6", "rue Alexandre Dumas", "", "60800", "Crépy-en-Valois", "France")
-
-        val projets1et2 = listOf(projet1, projet2)
-        updateProjectList(projets1et2)
-        //configureViewModel()
-        //this.getAllProjects()
-    }*/
-
-/*    private fun configureViewModel() {
-        Log.d(TAG, "configureViewModel")
-        val mViewModelFactory = Injection.provideViewModelFactory(this)
-        this.propertyViewModel = ViewModelProviders.of(this, mViewModelFactory).get(PropertyViewModel::class.java!!)
-    }
-
-    private fun getAllProjects() {
-        this.propertyViewModel.getAllProperty().observe(this, ???({ this.updatePropertyList(it) }))
-    }*/
-
-   /* private fun updateProjectList(projects: List<Project>) {
-        //tab_id = emptyArray()
-        //tab_id = arrayOf("id1", "id2")
-        tab_id = arrayOfNulls(projects.size)
-        tab_type = IntArray(projects.size)
-        //tab_name = arrayOf("nom1", "nom2")
-        tab_name = arrayOfNulls(projects.size)
-        tab_latitude = DoubleArray(projects.size)
-        tab_longitude = DoubleArray(projects.size)
-
-        for (i in projects) {
-
-        }
-
-        for (i in projects.indices) {
-            loadMarkerInfos(projects[i], i)
-        }
-
-        hideProgressBar()
-    }
-
-    fun loadMarkerInfos(currentProject: Project, i: Int) {
-        Log.d(TAG, "i= "+i)
-        currentType = currentProject.projectType
-        tab_type[i] = currentType
-        Log.d(TAG, "type= " + currentType)
-
-
-        currentName = currentProject.projectName
-        tab_name[i] = currentName
-        Log.d(TAG, "name: " +currentName)
-
-        tab_latitude[i] = setPropertyLatLng(
-            Address(
-                currentProject.projectAddressNumber,
-                currentProject.projectAddressStreet,
-                currentProject.projectAddressStreet2,
-                currentProject.projectAddressZipcode,
-                currentProject.projectAddressTown,
-                currentProject.projectAddressCountry
-            )
-        ).latitude
-        Log.d(TAG,"latitude: "+ tab_latitude[i].toString())
-        tab_longitude[i] = setPropertyLatLng(
-            Address(
-                currentProject.projectAddressNumber,
-                currentProject.projectAddressStreet,
-                currentProject.projectAddressStreet2,
-                currentProject.projectAddressZipcode,
-                currentProject.projectAddressTown,
-                currentProject.projectAddressCountry
-            )
-        ).longitude
-        Log.d(TAG,"longitude: "+ tab_longitude[i].toString())
-
-        addMarker(LatLng(tab_latitude[i], tab_longitude[i]), tab_type[i], tab_name[i])
-    }
-
-    private fun addMarker(latLng: LatLng, type: Int,name: String?) {
-// Ajuster la couleur du marqueur avec type
-        var markerColor : Float = BitmapDescriptorFactory.HUE_AZURE
-        when (type) {
-            1 -> markerColor = BitmapDescriptorFactory.HUE_AZURE
-            2 -> markerColor = BitmapDescriptorFactory.HUE_BLUE
-            3 -> markerColor = BitmapDescriptorFactory.HUE_ORANGE
-            4 -> markerColor = BitmapDescriptorFactory.HUE_RED
-            5 -> markerColor = BitmapDescriptorFactory.HUE_GREEN
-        }
-
-        val options = MarkerOptions()
-            .position(latLng)
-            .title(name)
-            .icon(BitmapDescriptorFactory.defaultMarker(markerColor))
-
-        mMap.addMarker(options)
-    }
-*/
-
-    //------------------------------------------------
-    // Geocoder
-    //------------------------------------------------
-
-   /* fun setPropertyLatLng(address: Address): LatLng {
-        try {
-            currentLat = geocoder(address).latitude
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        try {
-            currentLng = geocoder(address).longitude
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return LatLng(currentLat, currentLng)
-    }
-
-    @Throws(IOException::class)
-    fun geocoder(currentAddress: Address): LatLng {
-        val markersUrl = MarkersUrl()
-        val location = markersUrl.createGeocoderUrl(
-            currentAddress.numberInStreet,
-            currentAddress.street,
-            currentAddress.zipcode,
-            currentAddress.town,
-            currentAddress.country
-        )
-        val gc = Geocoder(this)
-        val list = gc.getFromLocationName(location, 1)
-        val add = list[0]
-        val locality = add.locality
-        val lat = add.latitude
-        val lng = add.longitude
-        return LatLng(lat, lng)
-    }*/
-
-
 }
