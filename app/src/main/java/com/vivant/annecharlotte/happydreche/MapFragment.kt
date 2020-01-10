@@ -2,6 +2,7 @@ package com.vivant.annecharlotte.happydreche
 
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -10,19 +11,18 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -52,9 +52,7 @@ private const val MY_PERMISSION_CODE: Int = 1000
  * A simple [Fragment] subclass.
  *
  */
-class MapFragment : Fragment(), OnMapReadyCallback {
-
-    // TODO: Rename parameter arguments, choose names that match
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     var progressBar: ProgressBar? =null
     var bottomNav: BottomNavigationView?=null
@@ -73,6 +71,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     //Markers
     private var mMarker: Marker?=null
+    private var projectMarker: Marker?=null
     private var currentLat: Double = 0.toDouble()
     private var currentLng:Double = 0.toDouble()
     private var currentType: Int = 0
@@ -245,7 +244,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         Log.d(TAG, "onMapReady")
 
-        googleMap?.let { mMap = it }
+        googleMap?.let { mMap = it
+            // Enable click on markers
+            mMap.setOnMarkerClickListener(this)}
 
         // Init Goole Play Services
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -262,6 +263,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // Enable zoom control
         mMap.uiSettings.isZoomControlsEnabled = true
+
+
 
         //Move camera
        if(myLatLng!=null) mMap!!.moveCamera(CameraUpdateFactory.newLatLng(myLatLng))
@@ -378,6 +381,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         tab_type[i] = currentType
         Log.d(TAG, "type= " + currentType)
 
+        currentId = currentProject.projectId
+        tab_id[i] = currentId
+        Log.d(TAG, "currentId= " + currentId)
 
         currentName = currentProject.projectName
         tab_name[i] = currentName
@@ -406,11 +412,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         ).longitude
         Log.d(TAG,"longitude: "+ tab_longitude[i].toString())
 
-        addMarker(LatLng(tab_latitude[i], tab_longitude[i]), tab_type[i], tab_name[i])
+        addMarker(LatLng(tab_latitude[i], tab_longitude[i]), tab_type[i], tab_name[i], tab_id[i])
     }
 
-    private fun addMarker(latLng: LatLng, type: Int,name: String?) {
-// Ajuster la couleur du marqueur avec type
+    private fun addMarker(latLng: LatLng, type: Int,name: String?, id:String?) {
+        Log.d("TAG", "addMarker id:" + id )
+
         var markerColor: Float = HUE_AZURE
         when (type) {
             1 -> markerColor = HUE_BLUE
@@ -422,12 +429,41 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val options = MarkerOptions()
             .position(latLng)
             .title(name)
-            .icon(defaultMarker(markerColor))
+            .icon(defaultMarker(markerColor)
+            )
 
         if (whichType == type || whichType == 0) {
-            mMap.addMarker(options)
+            projectMarker=mMap.addMarker(options)
         }
+
+        mMap.addMarker(options).run{
+             //  tag =id
+            tag=CustomTag(id!!)
+                Log.d(TAG,"addMarker tag: " + tag.toString())
+            }
+        }
+
+    // Click event listeners.
+    private fun onClick(tag: CustomTag) {
+         Log.d(TAG,tag.toString())
+        val intent = Intent(requireContext(), DetailActivity::class.java)
+         intent.putExtra("projectId", tag.toString())
+        startActivity(intent)
     }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        onClick(marker.tag as? CustomTag ?: return true)
+        // We return true to indicate that we have consumed the event and that we do not wish
+        // for the default behavior to occur (which is for the camera to move such that the
+        // marker is centered and for the marker's info window to open, if it has one).
+        return true
+    }
+
+    private class CustomTag(private val description: String) {
+
+        override fun toString() = description
+    }
+
 
     //------------------------------------------------
     // Geocoder
@@ -513,6 +549,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
       private fun hideProgressBar() {
           progressBar?.visibility=View.GONE
       }
+
 
 
 
