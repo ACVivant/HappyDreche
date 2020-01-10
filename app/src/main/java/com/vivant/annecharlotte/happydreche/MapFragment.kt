@@ -12,6 +12,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
 import com.vivant.annecharlotte.happydreche.firestore.MarkersUrl
 import com.vivant.annecharlotte.happydreche.firestore.Project
@@ -55,7 +57,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
 
     var progressBar: ProgressBar? =null
+    var bottomNav: BottomNavigationView?=null
     private lateinit var mMap: GoogleMap
+    private var listener: OnFragmentInteractionListener? = null
 
     private var latitude:Double=0.toDouble()
     private var longitude:Double=0.toDouble()
@@ -80,26 +84,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var tab_name: Array<String?>
     private lateinit var tab_latitude: DoubleArray
     private lateinit var tab_longitude: DoubleArray
+    private lateinit var tab_data: Array<Project>
+
+    private lateinit var gmarkers: Array<Marker>
 
     // Data
     lateinit var ref: DatabaseReference
     lateinit var projectsList: MutableList<Project>
-
-
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private var paramId: Array<String>? = null
-    private var paramName: Array<String>? = null
-    private var paramType: IntArray? = null
-    private var paramStreetNumber : Array<String>? = null
-    private var paramStreet: Array<String>? = null
-    private var paramZipcode: Array<String>? = null
-    private var paramTown: Array<String>? = null
-    private var paramCountry: Array<String>? = null
-
-    private var listener: OnFragmentInteractionListener? = null
+    var whichType:Int=0
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -112,7 +104,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Log.d(TAG, "onActivityCreated end")
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -122,7 +113,43 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         // Inflate the layout for this fragment
         val view:View = inflater.inflate(R.layout.fragment_map, container, false)
 
-        progressBar=view.findViewById<ProgressBar>(R.id.map_progress_bar) as ProgressBar
+        progressBar = view.findViewById<ProgressBar>(R.id.map_progress_bar) as ProgressBar
+        bottomNav = view.findViewById(R.id.map_bottom_navigation_view) as BottomNavigationView
+        bottomNav?.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.map_bottom_shop -> {
+                    whichType=1
+                    mMap.clear()
+                    updateProjectList(tab_data)
+                    true
+                }
+                R.id.map_bottom_resto-> {
+                    whichType=2
+                    mMap.clear()
+                    updateProjectList(tab_data)
+                    true
+                }
+                R.id.map_bottom_nonfood-> {
+                    whichType=3
+                    mMap.clear()
+                    updateProjectList(tab_data)
+                    true
+                }
+                R.id.map_bottom_research-> {
+                    whichType=4
+                    mMap.clear()
+                    updateProjectList(tab_data)
+                    true
+                }
+                R.id.map_bottom_all-> {
+                    whichType=0
+                    mMap.clear()
+                    updateProjectList(tab_data)
+                    true
+                }
+                else -> false
+            }
+        }
 
         showProgressBar()
 
@@ -130,8 +157,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         runPermissions()
 
         return view
-
     }
+
+//---------------------------------------------------
+// Permissions
+//---------------------------------------------------
 
     private fun runPermissions() {
         Log.d(TAG, "runPermissions")
@@ -173,16 +203,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (context is OnFragmentInteractionListener) {
             listener = context
             arguments?.let {
-                /*paramId = it.getStringArray(ARG_ID)
-                paramName = it.getStringArray(ARG_NAME)
-                paramType = it.getIntArray(ARG_TYPE)
-                paramStreetNumber = it.getStringArray(ARG_STREET_NUMBER)
-                paramStreet = it.getStringArray(ARG_STREET)
-                paramZipcode = it.getStringArray(ARG_ZIPCODE)
-                paramTown = it.getStringArray(ARG_TOWN)
-                paramCountry = it.getStringArray(ARG_COUNTRY)
-
-                Log.d(TAG,"print: " + paramName.toString())*/
             }
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
@@ -212,30 +232,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        /*fun newInstance(paramId: Array<String>, paramName: Array<String>, paramType: IntArray,
-                        paramStreetNumber : Array<String>, paramStreet: Array<String>, paramZipcode: Array<String>, paramTown: Array<String>, paramCountry: Array<String> ) =
-            MapFragment().apply {
-                arguments = Bundle().apply {
-                    putStringArray(ARG_ID, paramId)
-                    putStringArray(ARG_NAME, paramName)
-                    putIntArray(ARG_TYPE, paramType)
-                    putStringArray(ARG_STREET_NUMBER, paramStreetNumber)
-                    putStringArray(ARG_STREET, paramStreet)
-                    putStringArray(ARG_ZIPCODE, paramZipcode)
-                    putStringArray(ARG_TOWN, paramTown)
-                    putStringArray(ARG_COUNTRY, paramCountry)
-                }
-            }*/
         fun newInstance() =
             MapFragment().apply {
                 arguments = Bundle().apply {}
@@ -363,7 +360,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         tab_id = arrayOfNulls(projects.size)
         tab_type = IntArray(projects.size)
-        //tab_name = arrayOf("nom1", "nom2")
         tab_name = arrayOfNulls(projects.size)
         tab_latitude = DoubleArray(projects.size)
         tab_longitude = DoubleArray(projects.size)
@@ -415,13 +411,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun addMarker(latLng: LatLng, type: Int,name: String?) {
 // Ajuster la couleur du marqueur avec type
-        var markerColor : Float = HUE_AZURE
+        var markerColor: Float = HUE_AZURE
         when (type) {
-            1 -> markerColor = HUE_AZURE
-            2 -> markerColor = HUE_BLUE
+            1 -> markerColor = HUE_BLUE
+            2 -> markerColor = HUE_GREEN
             3 -> markerColor = HUE_ORANGE
             4 -> markerColor = HUE_RED
-            5 -> markerColor = HUE_GREEN
         }
 
         val options = MarkerOptions()
@@ -429,7 +424,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .title(name)
             .icon(defaultMarker(markerColor))
 
-        mMap.addMarker(options)
+        if (whichType == type || whichType == 0) {
+            mMap.addMarker(options)
+        }
     }
 
     //------------------------------------------------
@@ -498,6 +495,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     }
                 }
+                tab_data = projectsList.toTypedArray()
                 updateProjectList(projectsList.toTypedArray())
             }
         })

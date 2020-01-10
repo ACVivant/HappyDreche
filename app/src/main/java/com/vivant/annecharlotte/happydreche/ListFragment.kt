@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
+import com.google.firebase.database.*
+import com.vivant.annecharlotte.happydreche.firestore.Project
 import kotlinx.android.synthetic.main.fragment_list.*
 
 
@@ -27,6 +30,10 @@ class ListFragment : Fragment() {
     private var param2: String? = null
     private var listener: OnFragmentInteractionListener? = null
 
+    lateinit var ref: DatabaseReference
+    lateinit var projectsList: MutableList<Project>
+    lateinit var listView: ListView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,6 +44,29 @@ class ListFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        listView = view.findViewById(R.id.listing_all_projects)
+
+        projectsList = mutableListOf()
+        ref = FirebaseDatabase.getInstance().getReference("projects")
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                if (p0!!.exists()) {
+                    projectsList.clear()
+
+                    for(h in p0.children) {
+                        val project = h.getValue(Project::class.java)
+                        projectsList.add(project!!)
+                    }
+                    val adapter = ListingProjectsAdapter(requireContext(), R.layout.project_list_item, projectsList)
+                    listView.adapter = adapter
+                }
+            }
+        })
 
 
 /*        fab.setOnClickListener { view ->
@@ -98,11 +128,9 @@ class ListFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             ListFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }
